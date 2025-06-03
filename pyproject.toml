@@ -54,7 +54,7 @@ full = [
 ]
 
 [project.scripts]
-hypercode = "hypercode.cli:main"
+yoguido = "yoguido.cli:main"
 
 [project.urls]
 Homepage = "https://www.yoguido.com"
