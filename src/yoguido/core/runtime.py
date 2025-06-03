@@ -138,7 +138,7 @@ class YoGuidoApp:
     def debug_info(self):
         """Print debug information about the app state"""
         print("\n" + "="*60)
-        print("🔍 HYPERCODE APP DEBUG INFORMATION")
+        print("🔍 YOGUIDO APP DEBUG INFORMATION")
         print("="*60)
         
         print(f"📱 App Title: {self.title}")
