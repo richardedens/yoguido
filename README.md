@@ -25,9 +25,77 @@ YoGuido is a lightweight, powerful Python web framework designed to create moder
 pip install yoguido
 ```
 
+## 🧩 Core Concepts
+
+### Layout
+
+Determine a layout that can be used in a page
+
+```python
+import yoguido as yog
+@yog.layout("name_of_layout")
+def dashboard(components):
+    # Build up layout and components owned by the layout.
+    # ...
+
+    # Render your components
+    components()
+```
+
+### Pages
+
+Create interactive pages that can be navigated to with "yog.navigate_to(...url...)".
+
+```python
+import yoguido as yog
+@yog.page("/url", title="Your page title", layout="name_of_layout")
+def dashboard():
+    # Render components
+    with yog.container(class_name="text-center py-16"):
+        yog.text("💬", class_name="text-6xl mb-4")
+        yog.title("Support", level=1, class_name="text-3xl font-bold text-gray-900 mb-4")
+        yog.text("Support system coming soon!", class_name="text-lg text-gray-600")
+```
+
+### State Management
+
+Manage application state simply with Python:
+
+```python
+import yoguido as yog
+
+# Define a Class to hold state with a property to keep state accross backend and frontend.
+@yog.state
+class CounterState:
+    """Simple counter state for testing"""
+    def __init__(self):
+        self.count = 0
+
+# Define a page, the instance of the class with the initial count value.
+@yog.page("/admin", title="Your page title", layout="name_of_layout")
+def dashboard():
+
+    # Define a counter_state
+    counter_state = yog.use_state(CounterState, count=0)
+
+    # Define the action attached to the button.
+    def increment_counter():
+        print(f"🎯 TEST: Counter button clicked! Current: {counter_state.count}")
+        counter_state.count += 1
+        return True
+    
+    # Create a button on the page that will increase count.
+    counter_button = yog.button(f"Count: {counter_state.count}", on_click=increment_counter,
+                                class_name="bg-purple-500 text-white px-4 py-2 rounded")
+    
+```
+
+
 ## 🚀 Quick Start
 
-Create a simple application in minutes:
+Create a full blown application in minutes.
+Here is an example of an admin portal you can use.
+A single document you can easily split up.
 
 ```python
 """
@@ -763,77 +831,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-```
-
-## 🧩 Core Concepts
-
-### Layout
-
-Determine a layout that can be used in a page
-
-```python
-import yoguido as yog
-@yog.layout("name_of_layout")
-def dashboard(components):
-    # Build up layout and components owned by the layout.
-    # ...
-
-    # Render your components
-    components()
-```
-
-### Pages
-
-Create interactive pages that can be navigated to with "yog.navigate_to(...url...)".
-
-```python
-import yoguido as yog
-@yog.page("/url", title="Your page title", layout="name_of_layout")
-def dashboard():
-    # Render components
-    with yog.container(class_name="text-center py-16"):
-        yog.text("💬", class_name="text-6xl mb-4")
-        yog.title("Support", level=1, class_name="text-3xl font-bold text-gray-900 mb-4")
-        yog.text("Support system coming soon!", class_name="text-lg text-gray-600")
-```
-
-### Components
-
-Build your UI from composable components:
-
-
-
-### State Management
-
-Manage application state simply with Python:
-
-```python
-import yoguido as yog
-
-# Define a Class to hold state with a property to keep state accross backend and frontend.
-@yog.state
-class CounterState:
-    """Simple counter state for testing"""
-    def __init__(self):
-        self.count = 0
-
-# Define a page, the instance of the class with the initial count value.
-@yog.page("/admin", title="Your page title", layout="name_of_layout")
-def dashboard():
-
-    # Define a counter_state
-    counter_state = yog.use_state(CounterState, count=0)
-
-    # Define the action attached to the button.
-    def increment_counter():
-        print(f"🎯 TEST: Counter button clicked! Current: {counter_state.count}")
-        counter_state.count += 1
-        return True
-    
-    # Create a button on the page that will increase count.
-    counter_button = yog.button(f"Count: {counter_state.count}", on_click=increment_counter,
-                                class_name="bg-purple-500 text-white px-4 py-2 rounded")
-    
 ```
 
 ## 🛠️ Advanced Features
