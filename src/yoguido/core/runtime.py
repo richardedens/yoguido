@@ -6,7 +6,7 @@ Replace your yoguido/core/runtime.py with this version
 import asyncio
 import threading
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from .compiler import YoGuidoCompiler
 from .state import state_manager
@@ -18,7 +18,7 @@ class YoGuidoApp:
     Handles compilation, server management, and component registration
     """
     
-    def __init__(self, title: str = "YoGuido App", debug: bool = False):
+    def __init__(self, title: str = "YoGuido App", debug: bool = False, db_config: Optional[Dict] = None):
         self.title = title
         self.debug = debug
         self.build_dir = "./yoguido_build"
@@ -27,6 +27,10 @@ class YoGuidoApp:
         self.components: List[callable] = []
         self._compiled = False
         self._router_enabled = False
+        
+        # IMPORTANT: Store db_config but don't initialize connection yet
+        self.db_config = db_config
+        self.db_connection = None
     
     def add_component(self, component_func: callable):
         """Add a component function to the app"""
@@ -55,6 +59,20 @@ class YoGuidoApp:
         
         print("✅ Compilation complete!")
     
+    def _initialize_database(self):
+        """Initialize database connection only when needed"""
+        if self.db_config and not self.db_connection:
+            try:
+                print(f"🗄️ Initializing database connection...")
+                # Initialize your database connection here
+                # self.db_connection = create_db_connection(self.db_config)
+                print(f"✅ Database connection established")
+            except Exception as e:
+                print(f"❌ Database connection failed: {e}")
+                if self.debug:
+                    import traceback
+                    traceback.print_exc()
+    
     def run(self, host: str = "127.0.0.1", port: int = 8000, auto_compile: bool = True):
         """Run the application"""
         if auto_compile:
@@ -62,6 +80,10 @@ class YoGuidoApp:
         
         # FIXED: Set this as the current app so server can access it
         set_current_app(self)
+        
+        # Initialize database AFTER setting current app but BEFORE server start
+        if self.db_config:
+            self._initialize_database()
         
         # Setup state change notifications to trigger re-renders
         def on_state_change(event):
@@ -82,6 +104,7 @@ class YoGuidoApp:
         print(f"   Components: {len(self.components)}")
         print(f"   Router enabled: {self._router_enabled}")
         print(f"   Debug mode: {self.debug}")
+        
         
         # Run the server
         self.server.run(host=host, port=port)

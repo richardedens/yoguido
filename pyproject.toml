@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "yoguido"
-version = "0.1.6"
+version = "0.1.7"
 description = "The YoGuido Python UI Framework - Vanilla JS, No Dependencies"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -34,6 +34,11 @@ dependencies = [
     "uvicorn[standard]>=0.20.0",
     "jinja2>=3.1.0",
     "python-multipart>=0.0.6",
+    "pydantic>=2.0.0",
+    "cryptography>=36.0.0",
+    "psycopg2-binary>=2.9.0",
+    "mysql-connector-python>=8.0.0",
+    "httpx>=0.24.0"
 ]
 
 [project.optional-dependencies]
@@ -65,7 +70,7 @@ Changelog = "https://github.com/richardedens/yoguido/blob/main/CHANGELOG.md"
 
 [tool.setuptools]
 package-dir = {"" = "src"}  # Add this line - tells setuptools packages are in src/ directory
-packages = ["yoguido", "yoguido.core", "yoguido.examples", "yoguido.pages", "yoguido.ui", "yoguido.server"]
+packages = ["yoguido", "yoguido.core", "yoguido.data", "yoguido.examples", "yoguido.pages", "yoguido.ui", "yoguido.server"]
 
 [tool.setuptools.package-data]
 yoguido = [
